@@ -16,6 +16,7 @@ def main(argv=None):
     e.add_argument("--per-product", type=int, help="échantillon : N passages max par produit et pays")
     sub.add_parser("eval", help="évalue contre la vérité structurée")
     t = sub.add_parser("compare", help="tableau produit x pays x usage"); t.add_argument("--product"); t.add_argument("--csv")
+    f = sub.add_parser("footprint", help="empreinte réglementaire : par produit et pays, statut et usages documentés"); f.add_argument("--product")
     sub.add_parser("sisters", help="hypothèses de produits sœurs")
     a = sub.add_parser("ask", help="question en langage naturel"); a.add_argument("question")
     s = sub.add_parser("serve", help="API REST + interface d'administration (FastAPI)"); s.add_argument("--port", type=int, default=8088)
@@ -97,9 +98,16 @@ def main(argv=None):
         from . import cost_estimate
         report = cost_estimate.run()
         print(f"docs/COUT.md écrit ({len(report['options'])} options, {len(report['scenarios'])} scénarios)")
+    elif args.cmd == "footprint":
+        for row in comparison_table.footprint(qdrant_store.all_records()):
+            if not args.product or args.product.casefold() in row["product"].casefold():
+                print(f"{row['product']:24} {row['country']}  {row['usages']:3} usages, {row['with_dose']:3} avec dose  {', '.join(row['statuses'])}")
     elif args.cmd == "network":
         from . import polite_http
-        summary = polite_http.summarize_requests(polite_http.read_request_log())
+        entries = polite_http.read_request_log()
+        sources = [e for e in entries if e["host"] != "api.eppo.int"]     # collecte des sources officielles
+        summary = polite_http.summarize_requests(sources)
+        summary["api_eppo"] = polite_http.summarize_requests([e for e in entries if e["host"] == "api.eppo.int"])["per_host"]
         print(json.dumps(summary, ensure_ascii=False, indent=1))
     elif args.cmd == "voice":
         from . import narration
