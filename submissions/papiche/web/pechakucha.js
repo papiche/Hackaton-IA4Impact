@@ -549,7 +549,7 @@
   function visualLimits(p, clock) {
     const items = [
       ['✓', COLOR.green, '3 sources · 2 régions'], ['✓', COLOR.green, 'preuve et traçabilité'], ['✓', COLOR.green, 'produits sœurs (hypothèses)'],
-      ['◐', COLOR.amber, 'Microsoft 365 : documenté'], ['✗', COLOR.dim, 'Brésil (AGROFIT)'], ['✗', COLOR.dim, 'alertes d\'expiration'], ['✗', COLOR.dim, 'codes EPPO officiels'],
+      ['◐', COLOR.amber, 'Microsoft 365 : documenté'], ['✗', COLOR.dim, 'Brésil (AGROFIT)'], ['✗', COLOR.dim, 'alertes d\'expiration'], ['✗', COLOR.dim, 'jeu EPPO complet : 29 codes'],
     ];
     p.draw = () => {
       const t = clock(), u = unit(p), area = drawingArea(p);

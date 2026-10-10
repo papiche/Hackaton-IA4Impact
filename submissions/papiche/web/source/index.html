@@ -6,7 +6,7 @@ table{border-collapse:collapse;width:100%} td{padding:0 12px;vertical-align:top;
 td.ln{width:1%;white-space:nowrap;min-width:3.2em;text-align:right;color:#6b7888;user-select:none;position:sticky;left:0;background:#0b1117} td.ln a{color:inherit;text-decoration:none}
 tr.on td{background:rgba(46,213,115,.12)} tr.on td.ln{background:#12301f;color:#2ed573}
 .index li{margin:6px 0;font-family:system-ui,sans-serif} .index span{color:#8c98a8}
-</style><header><a href="../../index.html">← retour à la présentation</a><span class="path">tout le code · 45 fichiers</span><span class="licence">AGPL-3.0-or-later</span></header><ul class="index" style="padding:14px 34px"><li><a href="veille_reglementaire/__init__.py.html">veille_reglementaire/__init__.py</a> <span>Veille réglementaire PPP : agent IA maison de veille réglementaire (Ollama + Qdrant + Pydantic).</span></li>
+</style><header><a href="../../index.html">← retour à la présentation</a><span class="path">tout le code · 47 fichiers</span><span class="licence">AGPL-3.0-or-later</span></header><ul class="index" style="padding:14px 34px"><li><a href="veille_reglementaire/__init__.py.html">veille_reglementaire/__init__.py</a> <span>Veille réglementaire PPP : agent IA maison de veille réglementaire (Ollama + Qdrant + Pydantic).</span></li>
 <li><a href="veille_reglementaire/__main__.py.html">veille_reglementaire/__main__.py</a> <span></span></li>
 <li><a href="veille_reglementaire/admin_api.py.html">veille_reglementaire/admin_api.py</a> <span>Interface d&#x27;administration pour l&#x27;humain : voir l&#x27;état, relire, gérer les sources, lancer les traitements.</span></li>
 <li><a href="veille_reglementaire/api.py.html">veille_reglementaire/api.py</a> <span>API REST (contrat OpenAPI auto-généré sur /openapi.json) — base d&#x27;un connecteur personnalisé Power Platform.</span></li>
@@ -14,6 +14,7 @@ tr.on td{background:rgba(46,213,115,.12)} tr.on td.ln{background:#12301f;color:#
 <li><a href="veille_reglementaire/comparison_table.py.html">veille_reglementaire/comparison_table.py</a> <span>Tableau comparatif produit × pays × usage, avec retour à la source (URL + date de collecte).</span></li>
 <li><a href="veille_reglementaire/config.py.html">veille_reglementaire/config.py</a> <span>Configuration : tout se règle par variables d&#x27;environnement, aucune clé personnelle requise.</span></li>
 <li><a href="veille_reglementaire/cost_estimate.py.html">veille_reglementaire/cost_estimate.py</a> <span>Estimation du coût : service d&#x27;IA local (RTX 3090) comparé aux API payantes au token et aux forfaits.</span></li>
+<li><a href="veille_reglementaire/eppo_api.py.html">veille_reglementaire/eppo_api.py</a> <span>API officielle EPPO Global Database (api.eppo.int, v2). La clé vient de EPPO_API_KEY, jamais du dépôt.</span></li>
 <li><a href="veille_reglementaire/eppo_codes.py.html">veille_reglementaire/eppo_codes.py</a> <span>Normalisation EPPO : le LLM propose, la table confirme. Code inconnu -&gt; null, jamais deviné.</span></li>
 <li><a href="veille_reglementaire/evaluation.py.html">veille_reglementaire/evaluation.py</a> <span>Évaluation : compare l&#x27;extraction de l&#x27;IA aux colonnes STRUCTURÉES de la source (vérité terrain e-Phy).</span></li>
 <li><a href="veille_reglementaire/extraction_loop.py.html">veille_reglementaire/extraction_loop.py</a> <span>Boucle de contrôle : extraire (IA) → valider la forme (Pydantic) → vérifier la preuve (code) → recommencer.</span></li>
@@ -39,6 +40,7 @@ tr.on td{background:rgba(46,213,115,.12)} tr.on td.ln{background:#12301f;color:#
 <li><a href="veille_reglementaire/sources/pmra.py.html">veille_reglementaire/sources/pmra.py</a> <span>Source 2 — Santé Canada / PMRA, Pesticide Product Information Database (open data, CSV, sans clé).</span></li>
 <li><a href="veille_reglementaire/storyboard.py.html">veille_reglementaire/storyboard.py</a> <span>Storyboard vidéo de la présentation, au format de `generate_scene.sh` (Astroport.ONE/IA/generators).</span></li>
 <li><a href="veille_reglementaire/web_data.py.html">veille_reglementaire/web_data.py</a> <span>Fabrique web/data.js : tout ce que la page didactique affiche vient de VRAIES exécutions (traces, Qdrant, réponses).</span></li>
+<li><a href="tests/test_eppo_api.py.html">tests/test_eppo_api.py</a> <span>Client EPPO et appariement : aucun appel réseau, l&#x27;API est remplacée par un faux.</span></li>
 <li><a href="tests/test_loop.py.html">tests/test_loop.py</a> <span>Tests de la boucle de contrôle avec un FAUX modèle : on prouve que le code rejette les erreurs du LLM.</span></li>
 <li><a href="tests/test_review.py.html">tests/test_review.py</a> <span>La relecture humaine suit les mêmes règles que l&#x27;IA : une valeur sans preuve dans la source est refusée.</span></li>
 <li><a href="tests/test_sources.py.html">tests/test_sources.py</a> <span>Une nouvelle source se branche sans toucher au reste du code : découverte automatique et squelette valide.</span></li>

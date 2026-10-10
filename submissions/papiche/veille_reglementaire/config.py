@@ -5,6 +5,21 @@ import os
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+
+
+def _charger_fichier_env() -> None:
+    """Lit ROOT/.env (lignes CLE=valeur) ; une variable déjà définie dans l'environnement reste prioritaire."""
+    try:
+        lignes = (ROOT / ".env").read_text(encoding="utf-8").splitlines()
+    except OSError:
+        return
+    for ligne in lignes:
+        cle, separateur, valeur = ligne.partition("=")
+        if separateur and not cle.lstrip().startswith("#"):
+            os.environ.setdefault(cle.strip(), valeur.strip().strip("\"'"))
+
+
+_charger_fichier_env()
 DATA = Path(os.environ.get("VEILLE_DATA_DIR", ROOT / "data"))
 RAW = DATA / "raw"            # téléchargements bruts (non versionnés)
 PROCESSED = DATA / "processed"

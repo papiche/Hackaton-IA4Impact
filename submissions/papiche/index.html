@@ -4,9 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Veille réglementaire PPP · Agent IA maison de veille réglementaire</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<title>Veille réglementaire PPP · Agent IA maison</title>
 <link rel="stylesheet" href="web/source/pygments.css">
 <style>
 :root{
@@ -243,7 +241,7 @@ function init() {
   </div></div></section>
   <section class="block" id="video"><div class="wrap"><h2>6 minutes 32 pour tout comprendre</h2>
     <p class="sub">La présentation en vidéo : 20 diapositives, voix-off, sous-titres.</p>
-    <video controls preload="none" poster="video/poster.jpg" style="width:100%;max-width:960px;border-radius:14px;border:1px solid var(--line);background:#000"><source src="video/veille_reglementaire_pechakucha.mp4" type="video/mp4">Votre navigateur ne lit pas cette vidéo : <a href="video/veille_reglementaire_pechakucha.mp4">télécharger</a>.</video>
+    <video controls preload="none" poster="video/poster.jpg" style="width:100%;max-width:960px;border-radius:14px;border:1px solid var(--line);background:#000"><source src="video/veille_reglementaire_pechakucha.mp4" type="video/mp4"><track kind="subtitles" srclang="fr" label="Français" src="video/sous-titres.vtt" default>Votre navigateur ne lit pas cette vidéo : <a href="video/veille_reglementaire_pechakucha.mp4">télécharger</a>.</video>
     <p class="sub" style="margin-top:8px"><a href="video/veille_reglementaire_pechakucha.mp4" download>Télécharger (25 Mo)</a> · <a href="video/sous-titres.srt" download>Sous-titres (SRT, aussi intégrés au fichier)</a> · produite avec <code>generate_scene.sh</code> à partir de <code>video/storyboard.json</code></p></div></section>
   <section class="block" id="pas-a-pas"><div class="wrap"><h2>Voir une valeur naître</h2>
     <p class="sub">De la source officielle au résultat. Un vrai cas, 9 étapes (touches ← →).</p>
@@ -278,7 +276,7 @@ function init() {
     <details class="more"><summary>Produits sœurs (hypothèses à confirmer)</summary><div class="pad"><div class="scroll"><table class="cmp" id="sis"></table></div></div></details>
     <details class="more"><summary>Méthodes voisines : Arbor, Self-Refine, DSPy…</summary><div id="methods"></div></details>
     <details class="more"><summary>Les prompts et le contrat de données</summary><div class="pad"><div class="tabs" id="ptabs"></div><pre class="code" id="pcode" style="max-height:420px"></pre><p class="sub" id="pwhy" style="margin:10px 0 0"></p><pre class="code" id="models" style="margin-top:12px;max-height:420px"></pre></div></details></div></section>
-  <footer><div class="wrap">Sources publiques officielles (e-Phy, PMRA, EPA), date de collecte sur chaque ligne. « Vérifié par le code » n'est pas « validé » : seul un expert valide. Code sous licence AGPL-3.0.</div></footer>`;
+  <footer><div class="wrap">PPP : produits phytopharmaceutiques. LPC : Lallemand Plant Care. PMRA : Santé Canada. EPA : agence américaine de l'environnement. EPPO : code international unique d'une culture ou d'un organisme (VITVI = vigne), fiche officielle sur <a href="https://gd.eppo.int/" target="_blank" rel="noopener">gd.eppo.int</a>. <a href="docs/REFERENCES_ET_VULGARISATION.md">Références et vulgarisation</a> (protocoles, principes d'IA, mathématiques). Sources publiques officielles (e-Phy, PMRA, EPA), date de collecte sur chaque ligne. « Vérifié par le code » n'est pas « validé » : seul un expert valide. Code sous licence AGPL-3.0.</div></footer>`;
   buildTricks(); buildHuman(); buildSovereignty(); buildCases(); buildQA(); buildTable(); buildSisters(); buildEval(); buildMethods(); buildBench(); buildCost(); buildHeadline(); buildPrompts(); buildCoverage(); buildCodeSection();
 }
 
@@ -324,7 +322,7 @@ function buildHeadline() {
   const apis = C.options.filter(o => o.kind !== 'local'), cheapest = apis.reduce((m, o) => o.totals[big.name] < m.totals[big.name] ? o : m);
   const flagship = C.options.find(o => o.kind === 'api' && o.tier === 'haut' && o.label.includes('Opus'));
   el.innerHTML = `<div class="grid3">
-    <div class="card"><span class="tag">Modèle</span><div class="big-number">${esc(reco.model.replace(':latest', ''))}</div><p>${gigabytes(reco.vram_1_request_gb)} de VRAM : une carte de 8 Go suffit.</p></div>
+    <div class="card"><span class="tag">Modèle</span><div class="big-number">${esc(reco.model.replace(':latest', ''))}</div><p>${gigabytes(reco.vram_1_request_gb)} de VRAM : une carte de 8 Go devrait suffire (estimation, non testée sur 8 Go).</p></div>
     <div class="card"><span class="tag">Coût local · ${esc(frNumber(big.passages))} passages</span><div class="big-number">${money(C.options[0].totals[big.name])}</div><p>d'électricité (${money(C.options[1].totals[big.name])} avec la carte amortie).</p></div>
     <div class="card"><span class="tag">API payante · mêmes passages</span><div class="big-number" style="color:var(--amber)">${flagship ? money(flagship.totals[big.name]) : '–'}</div><p>haut de gamme. Le moins cher : ${esc(cheapest.label)}, ${money(cheapest.totals[big.name])}.</p></div></div>
     <div class="never"><b>Lecture honnête :</b> face aux plus petites API en lot, le local amorti est du même ordre. L'avantage décisif : les données restent chez nous, sans clé ni plafond. Seule la qualité des modèles locaux a été mesurée.</div>`;
@@ -411,7 +409,7 @@ function s9(cs, t) {
       ${row('Produit', esc(r.product), '')}${row('Pays', esc(PAYS[r.country]), esc(r.country))}${row('Culture', esc(r.crop_original), esc(r.crop_eppo))}${row('Cible', esc(r.target_original), esc(r.target_eppo))}${row('Dose', esc(r.dose_original), r.dose_norm_value != null ? esc(r.dose_norm_value + ' ' + r.dose_norm_unit) : null)}${row('Applications max', r.max_applications, '')}${row('Délai avant récolte (j)', r.pre_harvest_interval_days, '')}${row('Statut d\'autorisation', esc(r.authorization_status_original), esc(r.authorization_status))}</table>
       <div class="cap">Citation retrouvée dans la source</div><div class="codeblock">${esc(r.citation.quote)}</div>
       <div class="cap">Source · collecté le ${esc(r.citation.collected_at)}</div><a href="${esc(r.citation.source_url)}" target="_blank" rel="noopener">${esc(r.citation.source_url)}</a>
-      ${(ep.crop && ep.crop.steps.length) || (ep.target && ep.target.steps.length) ? `<div class="cap">Codes EPPO : le modèle choisit parmi des candidats, la table confirme</div><pre class="code" style="max-height:120px">${esc(JSON.stringify({ culture: ep.crop && ep.crop.steps.map(x => ({ mot: x.part, methode: x.method, code: x.code })), cible: ep.target && ep.target.steps.map(x => ({ mot: x.part, methode: x.method, code: x.code })) }, null, 1))}</pre>` : ''}<div class="coderefs">${codeLink('eppo')} ${codeLink('dose_norm')}</div>`,
+      ${(ep.crop && ep.crop.steps.length) || (ep.target && ep.target.steps.length) ? `<div class="cap">Codes EPPO : le modèle choisit parmi des candidats, la table confirme (ou l'API officielle, si elle désigne un seul code)</div><pre class="code" style="max-height:120px">${esc(JSON.stringify({ culture: ep.crop && ep.crop.steps.map(x => ({ mot: x.part, methode: x.method, code: x.code })), cible: ep.target && ep.target.steps.map(x => ({ mot: x.part, methode: x.method, code: x.code })) }, null, 1))}</pre>` : ''}<div class="coderefs">${codeLink('eppo')} ${codeLink('dose_norm')}</div>`,
     keep: `Au mieux « vérifié par le code ». Seul un expert valide.` };
 }
 
@@ -425,6 +423,7 @@ function buildQA() {
 
 /* ───────── tableau ───────── */
 let shown = [], tableExpanded = false;
+const eppoLinks = codes => codes ? codes.split(';').map(c => `<a href="https://gd.eppo.int/taxon/${encodeURIComponent(c)}" target="_blank" rel="noopener" title="Fiche officielle EPPO">${esc(c)}</a>`).join(' ; ') : '—';
 function buildTable() {
   const prods = [...new Set(L.table.map(r => r.product))].sort();
   $('#fp-pays').innerHTML = '<option value="">Tous les pays</option>' + COUNTRIES.map(c => `<option value="${esc(c)}">${esc(PAYS[c])}</option>`).join('');
@@ -441,7 +440,7 @@ function drawTable() {
   $('#cnt').textContent = shown.length + ' ligne' + (shown.length > 1 ? 's' : '');
   const more = $('#tbl-more'); more.hidden = shown.length <= 12; more.textContent = tableExpanded ? 'Réduire' : `Afficher les ${shown.length} lignes`;
   more.onclick = () => { tableExpanded = !tableExpanded; drawTable(); };
-  $('#tbl').innerHTML = `<tr><th>Produit</th><th>Pays</th><th>Culture</th><th>EPPO</th><th>Cible</th><th>EPPO</th><th>Dose (originale)</th><th>Dose normalisée</th><th>Statut</th><th>Source</th></tr>` + shown.slice(0, tableExpanded ? 400 : 12).map(r => `<tr><td>${esc(r.product)}</td><td>${esc(r.country)}</td><td>${esc(r.crop_original) || '—'}</td><td class="n">${esc(r.crop_eppo) || '—'}</td><td>${esc(r.target_original) || '—'}</td><td class="n">${esc(r.target_eppo) || '—'}</td><td>${esc(r.dose_original) || '—'}</td><td class="n">${r.dose_norm_value != null ? esc(r.dose_norm_value + ' ' + r.dose_norm_unit) : '—'}</td><td>${statutPill(r.validation_status)}</td><td><a href="${esc(r.source_url)}" target="_blank" rel="noopener">${esc(r.source_id)}</a><br><span class="cap">${esc(r.collected_at)}</span></td></tr>`).join('');
+  $('#tbl').innerHTML = `<tr><th>Produit</th><th>Pays</th><th>Culture</th><th>EPPO</th><th>Cible</th><th>EPPO</th><th>Dose (originale)</th><th>Dose normalisée</th><th>Statut</th><th>Source</th></tr>` + shown.slice(0, tableExpanded ? 400 : 12).map(r => `<tr><td>${esc(r.product)}</td><td>${esc(r.country)}</td><td>${esc(r.crop_original) || '—'}</td><td class="n">${eppoLinks(r.crop_eppo)}</td><td>${esc(r.target_original) || '—'}</td><td class="n">${eppoLinks(r.target_eppo)}</td><td>${esc(r.dose_original) || '—'}</td><td class="n">${r.dose_norm_value != null ? esc(r.dose_norm_value + ' ' + r.dose_norm_unit) : '—'}</td><td>${statutPill(r.validation_status)}</td><td><a href="${esc(r.source_url)}" target="_blank" rel="noopener">${esc(r.source_id)}</a><br><span class="cap">${esc(r.collected_at)}</span></td></tr>`).join('');
 }
 function buildSisters() {
   const rows = L.sisters;
@@ -451,7 +450,7 @@ function buildEval() {
   const e = L.eval; if (!e) { $('#eval').innerHTML = '<div class="empty">Évaluation non exécutée (<code>python -m veille_reglementaire eval</code>).</div>'; return; }
   const f = e.exactitude_par_champ, lab = { dose_value: 'Dose', dose_unit: 'Unité', max_applications: 'Applications max', pre_harvest_interval_days: 'Délai avant récolte', min_interval_days: 'Intervalle min.' };
   $('#eval').innerHTML = `<div class="card"><span class="tag">Exactitude vs colonnes structurées e-Phy</span><h3>${e.records_evalues} enregistrements comparés</h3>${Object.entries(f).map(([k, v]) => `<div style="margin:7px 0"><div style="display:flex;justify-content:space-between;font-size:.84rem"><span>${lab[k]}</span><b class="${v >= .95 ? 'ok' : 'warn'}">${v == null ? '–' : Math.round(v * 100) + ' %'}</b></div><div class="bar"><i style="width:${(v || 0) * 100}%"></i></div></div>`).join('')}</div>
-   <div class="card"><span class="tag">Honnêteté</span><h3>${e.valeurs_inventees_publiees} valeur(s) publiée(s) sans exister dans la source</h3><p>Compte des cas où le modèle a publié un champ que la source structurée laisse vide. Toute valeur publiée a de plus passé le contrôle de citation mot à mot.</p></div>
+   <div class="card"><span class="tag">Honnêteté</span><h3>${e.valeurs_inventees_publiees} valeur(s) publiée(s) sans exister dans la source</h3><p>Compte des cas où le modèle a publié un champ que la source structurée laisse vide. Toute valeur publiée a de plus passé le contrôle de citation mot à mot (pour les nombres de comptage, le nombre doit figurer quelque part dans le passage).</p></div>
    <div class="card"><span class="tag">Boucle de contrôle</span><h3>Essais par passage</h3><p>${Object.entries(e.essais_par_passage).map(([k, v]) => `${v} passage(s) en ${k} essai(s)`).join(' · ')}</p><h3 style="margin-top:10px">Issues par source</h3><p>${Object.entries(e.issues).map(([k, v]) => `${esc(k)} : ${v}`).join('<br>')}</p><p style="margin-top:8px;font-size:.8rem">Limite : l'EPA n'a pas de colonne de dose structurée (PDF) : contrôle par échantillon manuel.</p></div>`;
 }
 function buildMethods() {
@@ -581,7 +580,7 @@ function trickGroups() {
       ['Contrôle de preuve en code', 'Mot à mot, sans IA.', `${P.refused_by_proof_check} réponses refusées · ${f.inventedValues ?? '–'} valeur inventée`, ['proof_check', 'test_proof']],
       ['Retry avec le motif exact', 'Le modèle corrige, pas au hasard.', `${P.rescued_by_retry} passages sauvés`, ['retry_prompt', 'loop']],
       ['null plutôt qu\'inventer', 'Exigé, autorisé, vérifié.', `${f.caDoseNull} lignes canadiennes sans dose, zéro inventée`, ['prompt_extractor']],
-      ['Codes EPPO : choix fermé', 'Le modèle choisit, la table confirme.', 'un code inconnu reste inconnu', ['eppo']],
+      ['Codes EPPO : choix fermé', 'Le modèle choisit, la table confirme.', 'un nom absent de la table n\'est accepté que si l\'API officielle EPPO le désigne sans ambiguïté, sinon null', ['eppo']],
       ['Second avis indicatif', 'Il dégrade le statut, ne publie jamais.', `${P.flagged_to_confirm} marqués à confirmer`, ['critic']],
       ['Unités converties par calcul', 'lb/acre → kg/ha, jamais par l\'IA.', `${f.usConverted} doses américaines normalisées`, ['dose_norm']],
     ]],
@@ -635,12 +634,12 @@ function buildSovereignty() {
     <div class="card"><span class="tag">Sources</span><h3>${N ? N.cold.total_requests : '–'} requêtes pour tout collecter</h3><p>Au rejeu : ${N && N.warm ? `<b>${N.warm.total_megabytes} Mo</b>, ${N.warm.not_modified} réponses « inchangé »` : 'rien à retélécharger'}.</p></div>
   </div>
   ${networkTable(N)}
-  <div class="never"><b>Les seuls serveurs extérieurs sont les sources officielles.</b> Vérifiable : <code>./veille network</code>. Nous ne contournons rien : si un serveur demande d'attendre, nous attendons.</div>
+  <div class="never"><b>Les seuls serveurs extérieurs sont les sources officielles et, si une clé EPPO gratuite est fournie, api.eppo.int (seuls des noms de cultures et de cibles lui sont envoyés).</b> Vérifiable : <code>./veille network</code>. Nous ne contournons rien : si un serveur demande d'attendre, nous attendons.</div>
   ${codeDetails('polite')}`;
 }
 
 /* ───────── mode présentateur ───────── */
-const deck = { open: false, index: 0, notesVisible: true, startedAt: null, timerHandle: null, targetSeconds: 600 };
+const deck = { open: false, index: 0, notesVisible: true, startedAt: null, timerHandle: null, targetSeconds: 730 };
 
 function flowBox(kind, title, text) { return `<div class="node ${kind}"><b>${esc(title)}</b>${esc(text)}</div>`; }
 const arrow = '<div class="arrow">→</div>';
@@ -699,7 +698,7 @@ function buildSlides() {
     { kicker: 'Dimensionnement et coût', title: "Une carte de 8 Go suffit, et c'est peu cher", seconds: 70, link: ['#cout', 'Voir le coût détaillé'],
       message: reco ? `Le modèle ${reco.model} (7 milliards de paramètres) suffit : environ ${gigabytes(reco.vram_1_request_gb)} de VRAM.` : '',
       body: `<div class="grid"><div class="box"><h4>Modèle recommandé</h4><div class="big">${reco ? esc(reco.model.replace(':latest', '')) : '–'}</div><p>${rec ? `${rec.accepted}/${rec.passages} acceptés · ${rec.s_per_passage_mean} s par passage` : ''}</p></div><div class="box"><h4>VRAM</h4><div class="big">${reco ? gigabytes(reco.vram_1_request_gb) : '–'}</div><p>${reco ? `${gigabytes(reco.vram_4_parallel_gb)} pour 4 requêtes en parallèle · carte minimale : ${esc(reco.smallest_gpu)}` : ''}</p></div><div class="box"><h4>${esc(bigScenario)}</h4><p>Local : <b class="ok">${money(local)}</b> (électricité), <b>${money(localAmortized)}</b> avec amortissement<br>API la moins chère : <b>${cheapestApi ? esc(cheapestApi.label) + ' ' + money(cheapestApi.totals[bigScenario]) : '–'}</b><br>API haut de gamme : <b>${flagship ? esc(flagship.label) + ' ' + money(flagship.totals[bigScenario]) : '–'}</b></p></div></div><div class="never">Lecture honnête : face aux plus petits modèles API en lot, le local amorti est du même ordre de grandeur. Le vrai avantage est ailleurs : données qui ne sortent pas, pas de clé, pas de plafond d'usage. Et seule la qualité des modèles locaux a été mesurée.</div>`,
-      say: ["Trois modèles testés sur la même chaîne : le plus petit échoue trop, le plus gros n'apporte rien et est plus lent. Le 7 milliards est le bon choix.", "Il tient dans environ 6 Go : une carte de 8 Go suffit.", "Face aux IA payantes, le coût local est de quelques dollars pour tout un catalogue, mais je ne vends pas que le prix : je vends la souveraineté."],
+      say: ["Trois modèles testés sur la même chaîne : le plus petit échoue trop, le plus gros n'apporte rien et est plus lent. Le 7 milliards est le bon choix.", "Il tient dans environ 6 Go : une carte de 8 Go devrait suffire (estimation, non testée sur 8 Go).", "Face aux IA payantes, le coût local est de quelques dollars pour tout un catalogue, mais je ne vends pas que le prix : je vends la souveraineté."],
       show: ["Le modèle recommandé et sa VRAM.", "La phrase « lecture honnête » : ne pas survendre le coût."] },
     { kicker: 'Couverture du défi', title: "Ce qui est fait, ce qui ne l'est pas", seconds: 50, link: ['#defi', 'Voir le tableau'],
       message: "Nous avons choisi la profondeur plutôt que l'étendue : la fiabilité de l'extraction.",
@@ -720,9 +719,9 @@ function buildSlides() {
         ["Et les hallucinations ?", `Aucune valeur n'est publiée sans citation retrouvée mot à mot, par du code. Mesure : ${f.inventedValues ?? '–'} valeur inventée sur ${f.compared ?? '–'} comparées, ${P.refused_by_pydantic + P.refused_by_proof_check} réponses fautives interceptées. Limite : la mesure automatique ne couvre pas l'EPA (PDF), contrôlée par échantillon.`],
         ["Et si on se fait bannir par les sources ?", `Le risque est traité à la racine : jeux ouverts pris en bloc (${N ? N.cold.total_requests : '–'} requêtes en tout), requêtes conditionnelles (${N && N.warm ? N.warm.total_megabytes + ' Mo' : '0 Mo'} au rejeu), User-Agent honnête, pause entre requêtes, attente respectée sur 429/503. Nous ne contournons aucune protection.`],
         ["Que se passe-t-il quand le modèle se trompe ?", "Pydantic ou le contrôle de preuve refuse, le motif exact est renvoyé au modèle (3 essais). Après trois échecs, rien n'est publié et un expert reçoit le dossier. La page le montre en direct."],
-        ["De quel matériel a-t-on besoin ?", reco ? `Le modèle recommandé (${reco.model}) demande environ ${gigabytes(reco.vram_1_request_gb)} de VRAM, ${gigabytes(reco.vram_4_parallel_gb)} pour 4 requêtes en parallèle : une carte de 8 Go suffit. Stockage : quelques Go pour des catalogues complets (voir « GPU & stockage »).` : '–'],
+        ["De quel matériel a-t-on besoin ?", reco ? `Le modèle recommandé (${reco.model}) demande environ ${gigabytes(reco.vram_1_request_gb)} de VRAM, ${gigabytes(reco.vram_4_parallel_gb)} pour 4 requêtes en parallèle : une carte de 8 Go devrait suffire (estimation, non testée sur 8 Go). Stockage : quelques Go pour des catalogues complets (voir « GPU & stockage »).` : '–'],
         ["Comment LPC reprend le projet ?", "Dépôt Git, README en quatre commandes, prompts versionnés, jeu d'évaluation, licence AGPL. Le modèle se change par configuration, sans clé personnelle."],
-        ["Qu'est-ce qui manque ?", "Le Brésil (AGROFIT, non joignable), les alertes d'expiration, le jeu EPPO officiel de LPC, un test sur un tenant Microsoft 365. Nous préférons une extraction fiable à une couverture large."],
+        ["Qu'est-ce qui manque ?", "Le Brésil (AGROFIT, non joignable), les alertes d'expiration, le jeu EPPO complet de LPC (29 codes aujourd'hui, noms enrichis par l'API officielle), un test sur un tenant Microsoft 365. Nous préférons une extraction fiable à une couverture large."],
       ],
       say: ["Garder une réponse courte et chiffrée.", "Ne jamais surpromettre : citer la limite avant qu'on la découvre.", "Revenir à la phrase clé : l'IA propose, le code décide."],
       show: ["Cette page : ouvrir la question posée."] },

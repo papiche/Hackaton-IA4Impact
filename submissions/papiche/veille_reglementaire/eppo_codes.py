@@ -1,12 +1,12 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 """Normalisation EPPO : le LLM propose, la table confirme. Code inconnu -> null, jamais deviné.
 
-config/eppo_seed.csv est une AMORCE de codes vérifiés à la main ; LPC la remplace par son jeu EPPO officiel
-(même format : code,kind,names). La valeur originale reste toujours conservée à côté du code.
+config/eppo_seed.csv est une AMORCE de codes vérifiés à la main ; LPC y met son jeu EPPO complet (même format : code,kind,names).
+config/eppo_officiel.csv est GÉNÉRÉ par enrichir_table() (noms officiels issus de l'API EPPO) : ne pas l'éditer à la main. La valeur originale reste toujours conservée à côté du code.
 """
 from __future__ import annotations
 import csv, difflib, functools, json, re, unicodedata
-from . import config, llm
+from . import config, eppo_api, llm
 from .models import EppoChoice
 
 URL_FICHE_EPPO = "https://gd.eppo.int/taxon/{code}"
@@ -80,6 +80,29 @@ def candidates(name: str, kind: str, n: int = 5) -> list[tuple[str, str, float]]
     return [(c, nm, r) for c, nm, r in top if r >= 0.6]
 
 
+def _code_par_api(nom: str) -> str | None:
+    """Dernier recours : l'API EPPO, acceptée seulement si elle désigne UN seul code pour ce nom exact."""
+    codes = set(eppo_api.codes_du_nom(nettoyer_nom(nom)) or eppo_api.codes_du_nom(nom))
+    return codes.pop() if len(codes) == 1 else None
+
+
+def enrichir_table() -> int:
+    """Complète config/eppo_officiel.csv avec les noms officiels (fr, en, pt, latin) de chaque code connu.
+    Retourne le nombre de noms ajoutés par rapport à l'amorce."""
+    lignes, ajoutes = [], 0
+    with open(config.CONFIG / "eppo_seed.csv", encoding="utf-8") as f:
+        for r in csv.DictReader(f):
+            connus = {fold(n) for n in r["names"].split("|")}
+            nouveaux = [n for n in eppo_api.noms_du_code(r["code"]) if fold(n) not in connus]
+            ajoutes += len(nouveaux)
+            lignes.append({"code": r["code"], "kind": r["kind"], "names": "|".join(r["names"].split("|") + nouveaux)})
+    with open(config.CONFIG / "eppo_officiel.csv", "w", encoding="utf-8", newline="") as f:
+        auteur = csv.DictWriter(f, fieldnames=["code", "kind", "names"])
+        auteur.writeheader(); auteur.writerows(lignes)
+    table.cache_clear()
+    return ajoutes
+
+
 def normalize(original: str | None, kind: str) -> dict:
     """Retourne {"eppo": "A;B"|None, "method": ..., "steps": [...]} (steps = trace pédagogique)."""
     if not original:
@@ -92,6 +115,11 @@ def normalize(original: str | None, kind: str) -> dict:
             codes.append(exact[0]); steps.append({"part": part, "method": "table", "code": exact[0], "candidates": [c for c, *_ in cands]})
             continue
         if not cands:
+            code_officiel = _code_par_api(part)
+            if code_officiel:
+                codes.append(code_officiel)
+                steps.append({"part": part, "method": "api_eppo", "code": code_officiel, "candidates": [code_officiel]})
+                continue
             steps.append({"part": part, "method": "aucun_candidat", "code": None, "candidates": []})
             return {"eppo": None, "method": "non_confirme", "steps": steps}
         listing = "\n".join(f"- {c} ({nm})" for c, nm, _ in cands)
