@@ -2,6 +2,7 @@
 
 ## Équipe
 
+- Contact : support@qo-op.com (G1FabLab)
 - Nom de l'équipe : papiche
 - Membres (pseudo GitHub) : papiche
 - Défi choisi : `lallemand`
