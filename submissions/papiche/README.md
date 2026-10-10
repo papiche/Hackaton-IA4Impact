@@ -29,6 +29,7 @@ Impact visé : comparer produit × pays × usage sans ressaisie, avec une valeur
 
 ## Lancer le projet
 
+Démonstration en commandes : `./demo.sh` (pause à chaque étape) ou `./demo.sh --auto`.
 Voir `index.html` (récit du projet) et `requirements.txt` ; `./run_all.sh` enchaîne la chaîne complète (Ollama local requis).
 Les données brutes et la vidéo ne sont pas dans ce dossier (poids) : elles sont dans la version IPFS ci-dessous.
 
