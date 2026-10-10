@@ -34,5 +34,5 @@ Les données brutes et la vidéo ne sont pas dans ce dossier (poids) : elles son
 
 ## Démo / Slides
 
-- Démo (IPFS, site complet avec vidéo) : https://ipfs.copylaradio.com/ipfs/QmYeXE5o2F1a5xWK1fHv11YVVVagRinwBzPhToFyxEo4zw/index.html
+- Démo (IPFS, site complet avec vidéo) : https://ipfs.copylaradio.com/ipfs/QmXxw4BZWxqUNwTFeGS1fsZk9LXmfDGNoC7gFigspKcxi6/index.html
 - Présentation : page `index.html` ci-dessus (format PechaKucha, vidéo incluse)
